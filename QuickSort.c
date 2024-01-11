@@ -1,66 +1,39 @@
-//CSL201 DATA STRUCTURES LAB ----- ARSHAK MUHAMMED P K, R3A, 72
-//Quick Sort
-
 #include <stdio.h>
 
-int partition(int arr[], int low, int high) {
-    int pivot = arr[low];
-    int leftwall = low;
+void swap(int* a, int* b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
 
-    for (int i = low + 1; i <= high; i++) {
-        if (arr[i] < pivot) {
-            leftwall++;
-            int temp = arr[i]; // Swap
-            arr[i] = arr[leftwall];
-            arr[leftwall] = temp;
+int partition (int arr[], int low, int high) {
+    int pivot = arr[high]; 
+    int i = (low - 1); 
+
+    for (int j = low; j <= high - 1; j++) {
+        if (arr[j] < pivot) {
+            i++; 
+            swap(&arr[i], &arr[j]);
         }
     }
-    int temp = arr[leftwall]; // Swap
-    arr[leftwall] = pivot;
-    arr[low] = temp; 
-
-    return leftwall;
+    swap(&arr[i + 1], &arr[high]);
+    return (i + 1);
 }
 
-
-void qsort(int arr[], int low, int high) {
+void quickSort(int arr[], int low, int high) {
     if (low < high) {
-        int pivot_location = partition(arr, low, high);
-        qsort(arr, low, pivot_location);
-        qsort(arr, pivot_location + 1, high);
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
     }
-}
-
-void display(int arr[], int n) {
-    for (int i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
-    }
-    printf("\n");
 }
 
 int main() {
-    int n, arr[100];
-    printf("****QUICK SORTING****\n");
-    
-    // User input with error checking
-    printf("Enter number of elements (max 100): ");
-    scanf("%d", &n);
-    
-    if (n > 100 || n <= 0) {
-        printf("Invalid number of elements. Exiting.\n");
-        return 1;
-    }
-
-    for (int i = 0; i < n; i++) {
-        printf("\nEnter %dth element: ", i + 1);
-        scanf("%d", &arr[i]);
-    }
-
-    printf("\nBefore Sorting:");
-    display(arr, n);
-    printf("\nAfter Sorting:");
-    qsort(arr, 0, n - 1);
-    display(arr, n);
-
+    int arr[] = {10, 7, 8, 9, 1, 5};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    quickSort(arr, 0, n - 1);
+    printf("Sorted array: \n");
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
     return 0;
 }
